@@ -1,66 +1,95 @@
- //Fetch http://localhost:300/characters.
-function fetchAnimals() {
-    fetch("http://localhost:3000/characters")
-      .then((resp) => resp.json())
-      .then(myCharacter);
+document.addEventListener("DOMContentLoaded", () => {
+  // Define an array of character objects with the GIF details.
+  const characters = [
+    {
+      id: 1,
+      name: "Mr. Cute",
+      image: "https://thumbs.gfycat.com/EquatorialIckyCat-max-1mb.gif",
+      votes: 0
+    },
+    {
+      id: 2,
+      name: "Mx. Monkey",
+      image: "https://thumbs.gfycat.com/FatalInnocentAmericanshorthair-max-1mb.gif",
+      votes: 0
+    },
+    {
+      id: 3,
+      name: "Ms. Zebra",
+      image: "https://media2.giphy.com/media/20G9uNqE3K4dRjCppA/source.gif",
+      votes: 0
+    },
+    {
+      id: 4,
+      name: "Dr. Lion",
+      image: "http://bestanimations.com/Animals/Mammals/Cats/Lions/animated-lion-gif-11.gif",
+      votes: 0
+    },
+    {
+      id: 5,
+      name: "Mme. Panda",
+      image: "https://media.giphy.com/media/ALalVMOVR8Qw/giphy.gif",
+      votes: 0
+    }
+  ];
+
+  // Keep track of the currently selected character. Defaults to the first one.
+  let currentCharacter = characters[0];
+
+  // Get references to the DOM elements.
+  const characterBar = document.getElementById("character-bar");
+  const nameEl = document.getElementById("name");
+  const imageEl = document.getElementById("image");
+  const voteCountEl = document.getElementById("vote-count");
+  const votesForm = document.getElementById("votes-form");
+  const votesInput = document.getElementById("votes");
+  const resetBtn = document.getElementById("reset-btn");
+
+  // Update the character detail area with the given character's data
+  function displayCharacter(character) {
+    currentCharacter = character;
+    nameEl.innerText = character.name;
+    imageEl.src = character.image;
+    voteCountEl.innerText = character.votes;
   }
-  // Takes in a number of characters but only renders them one by one
-  function myCharacter(characters) {
-    characters.forEach(myDetails);
-  }
-  // Render animals.
-  let myFlatacutie;
-  function myDetails(character) {
-    const characterId = character.id;
-    // const characterName= character.characterName
-    const characterImage = character.image;
-    const characterVotes = character.votes;
-    const bar = document.querySelector("#character-bar");
-    const spanDetails = document.createElement("span");
-    spanDetails.innerHTML = character.name;
-    // Append spanDetails.
-    bar.appendChild(spanDetails);
-    spanDetails.style.cursor = "pointer";
-    spanDetails.addEventListener("click", () => {
-      // Store the state.
-      myFlatacutie = character;
-      // Show data that is specific to a given animal.
-      showFlatacutie(character);
+
+  // Dynamically render the character bar list.
+  function renderCharacterBar() {
+    // Clear any existing items
+    characterBar.innerHTML = "";
+    // Create a span element for each character
+    characters.forEach(character => {
+      const charSpan = document.createElement("span");
+      charSpan.innerText = character.name;
+      charSpan.style.cursor = "pointer";
+      charSpan.style.marginRight = "15px";
+      // When the character is clicked, update the detail view.
+      charSpan.addEventListener("click", () => {
+        displayCharacter(character);
+      });
+      characterBar.appendChild(charSpan);
     });
   }
-  // Display the selected data.
-  function showFlatacutie(character) {
-    const characterName = document.querySelector("p#name");
-    characterName.innerHTML = character.name;
-    const characterImg = document.querySelector("img#image");
-    characterImg.src = character.image;
-  // Access the votes form.
-    const characterVotes = document.querySelector("span#vote-count");
-    characterVotes.innerHTML = character.votes;
-  }
-  
-  // Reset button.
-  const resetVotes = document.querySelector("button#reset-btn");
-  // Create a pointer. 
-  resetVotes.style.cursor = "pointer";
-  // Add an event listener that fires when the user clicks a button.
-  // Set default animal votes to 0.
-  resetVotes.addEventListener("click", () => {
-    myFlatacutie.votes = 0;
-    showFlatacutie(myFlatacutie);
-    // Reset the form's default values.
-    form.reset();
-  });
-  // Adding votes.
-   const inputvotes = document.querySelector("input#votes");
-  const animalVotes = document.querySelector("span#vote-count");
-  const form = document.querySelector("form#votes-form");
-  // Capture the submit event.
-  form.addEventListener("submit", (e) => {
-    // Prevent the event's default action from occuring.
+
+  // Render the character bar and show the default character details on page load.
+  renderCharacterBar();
+  displayCharacter(currentCharacter);
+
+  // Add votes based on the form submission.
+  votesForm.addEventListener("submit", (e) => {
     e.preventDefault();
-  //   Return the value provided and display the results together with the animal's details.
-  myFlatacutie.votes += parseInt(e.target.votes.value, 10);
-  showFlatacutie(myFlatacutie);
-    form.reset();
+    // Convert the input text to a number.
+    const voteValue = parseInt(votesInput.value);
+    if (!isNaN(voteValue)) {
+      currentCharacter.votes += voteValue;
+      voteCountEl.innerText = currentCharacter.votes;
+    }
+    votesForm.reset();
   });
+
+  // Reset the vote count for the current character.
+  resetBtn.addEventListener("click", () => {
+    currentCharacter.votes = 0;
+    voteCountEl.innerText = currentCharacter.votes;
+  });
+});

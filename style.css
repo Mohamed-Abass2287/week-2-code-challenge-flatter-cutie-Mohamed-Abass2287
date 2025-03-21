@@ -21,7 +21,9 @@ html, body {
   justify-content: space-around;
   align-items: center;
   padding-bottom: 3vh;
-
+  text-size-adjust: 15px;
+  
+ 
 
 }
 
@@ -33,7 +35,7 @@ html, body {
   justify-content: center;
   font-size: 3vh;
   align-items: center;
-  border-radius: 2em;
+  border-radius: 40%;
   border: 1px solid white;
 }
 
@@ -46,7 +48,7 @@ html, body {
 }
 
 input[type="submit"], button {
-  background-color: rgb(49, 109, 179);
+  background-color: rgb(26, 122, 231);
   color: white;
   font-size: 18px;
   border-radius: 6px;
