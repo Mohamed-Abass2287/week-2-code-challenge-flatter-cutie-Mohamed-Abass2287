@@ -72,3 +72,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fetch characters and initialize the app
   fetchCharacters();
 });
+// PATCH request to reset votes on the server
+ patchVotes(currentCharacter.id, currentCharacter.votes);
+
+
+// PATCH request to update votes 
+function patchVotes(characterId, votes) {
+  fetch(`https://mohaa-zeta.vercel.app/characters/${characterId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ votes })
+  })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to update votes");
+      return response.json();
+    })
+    .then(updatedCharacter => {
+      console.log(`Votes updated for character ID ${characterId}:`, updatedCharacter);
+    })
+    .catch(error => console.error("Error updating votes:", error));
+}
+
+// Fetch characters and initialize the app
+fetchCharacters();
